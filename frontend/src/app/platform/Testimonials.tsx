@@ -100,21 +100,23 @@ const Testimonials = () => {
       setLoading(true);
 
       const imageFile = data.image_url[0];
-      const imageUrl = await uploadImage(imageFile);
-
-      const testimonialData = {
-        name: data.name,
-        feedback: data.feedback,
-        image_url: imageUrl,
-      };
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("feedback", data.feedback);
+      formData.append("image", imageFile); // Must match @RequestParam("image") in backend
 
       const response = await axios.post(
-        "http://localhost:8081/api/v1/testimonial",
-        testimonialData
+        "http://localhost:8080/api/v1/testimonial",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
 
-      setTestimonials([...testimonials, response.data.data]);
-
+      // Update testimonials
+      setTestimonials([...testimonials, response.data]);
       reset();
       setUploadedImage(null);
       setShowCreate(false);

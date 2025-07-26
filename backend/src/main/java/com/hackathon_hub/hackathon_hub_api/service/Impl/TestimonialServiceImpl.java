@@ -29,7 +29,7 @@ public class TestimonialServiceImpl implements TestimonialService {
         // Upload image
         String imagePath = fileService.uploadImage(imageFile, "testimonials");
 
-        // Save testimonial
+        // Save testimonial with image url
         Testimonials testimonialEntity = new Testimonials();
         testimonialEntity.setName(name);
         testimonialEntity.setFeedback(feedback);
