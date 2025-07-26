@@ -28,19 +28,9 @@ public class TestimonialController {
             @RequestParam("name") String name,
             @RequestParam("feedback") String feedback,
             @RequestParam("image") MultipartFile imageFile) {
-
         try {
-            // Upload image and get relative path
-            String imagePath = fileService.uploadImage(imageFile, "testimonials");
-
-            // Save testimonial
-            Testimonials testimonialEntity = new Testimonials();
-            testimonialEntity.setName(name);
-            testimonialEntity.setFeedback(feedback);
-            testimonialEntity.setImageUrl("/uploads/testimonials/" + imagePath); // public URL
-
-            Testimonials saved = testimonialRepository.save(testimonialEntity);
-            return ResponseEntity.ok(TestimonialResponseDto.fromEntity(saved));
+            TestimonialResponseDto response = testimonialService.createTestimonial(name, feedback, imageFile);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
