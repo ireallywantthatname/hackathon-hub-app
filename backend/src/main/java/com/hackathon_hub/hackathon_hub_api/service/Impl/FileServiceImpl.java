@@ -26,7 +26,7 @@ public class FileServiceImpl implements FileService {
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            return  dir + "/" + fileName;
+            return dir + "/" + fileName;
 
         } catch (IOException e) {
             throw new Exception("Failed to upload image");

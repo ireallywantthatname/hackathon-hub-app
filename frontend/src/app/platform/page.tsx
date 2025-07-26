@@ -3,6 +3,11 @@ import { useState } from "react";
 import Editors from "./Editors";
 import Events from "./Events";
 import Testimonials from "./Testimonials";
+import { Roboto, Inter } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+});
 
 const NavMenu = () => {
   const tabs = [
@@ -20,10 +25,10 @@ const NavMenu = () => {
     },
   ];
 
-  const [activeTab, setActiveTab] = useState(tabs[0].name);
+  const [activeTab, setActiveTab] = useState(tabs[2].name);
 
   return (
-    <div className="relative h-screen w-screen">
+    <div className={`relative h-screen w-screen ${inter.className}`}>
       <div className="absolute top-4 left-4 text-5xl text-center font-bold">
         Hackathon Hub
       </div>
@@ -49,7 +54,7 @@ const NavMenu = () => {
           ))}
         </div>
       </div>
-      <div className="p-8 overflow-y-auto">
+      <div className="flex flex-col items-center justify-center h-screen p-8 overflow-y-auto">
         {activeTab === "Editors" && <Editors />}
         {activeTab === "Events" && <Events />}
         {activeTab === "Testimonials" && <Testimonials />}
