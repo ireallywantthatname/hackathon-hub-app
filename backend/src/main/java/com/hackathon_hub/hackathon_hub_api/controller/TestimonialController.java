@@ -3,19 +3,15 @@ package com.hackathon_hub.hackathon_hub_api.controller;
 import java.util.List;
 import java.util.UUID;
 
+import com.hackathon_hub.hackathon_hub_api.entity.Testimonials;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.hackathon_hub.hackathon_hub_api.dto.response.TestimonialResponseDto;
 import com.hackathon_hub.hackathon_hub_api.dto.response.common.ApiResponse;
 import com.hackathon_hub.hackathon_hub_api.service.TestimonialService;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/testimonial")
@@ -28,16 +24,26 @@ public class TestimonialController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Object>> createTestimonial(
-            @RequestBody TestimonialResponseDto testimonialResponseDto) {
-        TestimonialResponseDto createdTestimonial = testimonialService.createTestimonial(testimonialResponseDto);
+    public ResponseEntity<TestimonialResponseDto> createTestimonial(
+            @RequestParam("name") String name,
+            @RequestParam("feedback") String feedback,
+            @RequestParam("image") MultipartFile imageFile) {
 
-        ApiResponse<Object> response = new ApiResponse<>(
-                true,
-                "Testimonial created successfully.",
-                createdTestimonial);
+        try {
+            // Upload image and get relative path
+            String imagePath = fileService.uploadImage(imageFile, "testimonials");
 
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+            // Save testimonial
+            Testimonials testimonialEntity = new Testimonials();
+            testimonialEntity.setName(name);
+            testimonialEntity.setFeedback(feedback);
+            testimonialEntity.setImageUrl("/uploads/testimonials/" + imagePath); // public URL
+
+            Testimonials saved = testimonialRepository.save(testimonialEntity);
+            return ResponseEntity.ok(TestimonialResponseDto.fromEntity(saved));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping

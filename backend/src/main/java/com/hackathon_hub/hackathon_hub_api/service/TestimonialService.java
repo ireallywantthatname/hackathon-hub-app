@@ -6,10 +6,11 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.hackathon_hub.hackathon_hub_api.dto.response.TestimonialResponseDto;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public interface TestimonialService {
-    public TestimonialResponseDto createTestimonial(TestimonialResponseDto testimonial);
+    public TestimonialResponseDto createTestimonial(String name, String feedback, MultipartFile imageFile) throws Exception;
 
     public List<TestimonialResponseDto> getAllTestimonials();
 
