@@ -106,7 +106,7 @@ const Testimonials = () => {
       formData.append("image", imageFile); // Must match @RequestParam("image") in backend
 
       const response = await axios.post(
-        "http://localhost:8080/api/v1/testimonial",
+        "http://localhost:8081/api/v1/testimonial",
         formData,
         {
           headers: {
